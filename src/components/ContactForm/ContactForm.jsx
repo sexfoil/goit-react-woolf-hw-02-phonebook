@@ -5,19 +5,28 @@ import { nanoid } from 'nanoid';
 class ContactForm extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
-    const inputName = evt.target.name.value;
-    const inputNumber = evt.target.number.value;
+    const form = evt.target;
 
-    const newContact = { id: nanoid(), name: inputName, number: inputNumber };
-    this.props.updateContacts(newContact);
+    if (this.props.hasContact(form.name.value)) {
+      alert(`${form.name.value} is already in contacts.`);
+      return;
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name: form.name.value,
+      number: form.number.value,
+    };
+    this.props.addContact(newContact);
+
+    form.reset();
   };
 
   handleChange = ({ target: { name, value } }) => {
-    this.props.updateInput(name, value);
+    this.props.hasContact(name, value);
   };
 
   render() {
-    const { name, number } = this.props;
     return (
       <form className={css.form} onSubmit={this.handleSubmit}>
         <div className={css.inputs}>
@@ -27,7 +36,7 @@ class ContactForm extends Component {
           <input
             type="text"
             name="name"
-            value={name}
+            // value={this.name}
             onChange={this.handleChange}
             id="name"
             pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"
@@ -40,7 +49,7 @@ class ContactForm extends Component {
           <input
             type="tel"
             name="number"
-            value={number}
+            // value={this.number}
             onChange={this.handleChange}
             id="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
