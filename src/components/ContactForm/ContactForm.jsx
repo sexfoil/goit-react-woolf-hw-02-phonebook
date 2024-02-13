@@ -3,6 +3,11 @@ import css from './ContactForm.module.css';
 import { nanoid } from 'nanoid';
 
 class ContactForm extends Component {
+  state = {
+    name: '',
+    number: '',
+  };
+
   handleSubmit = evt => {
     evt.preventDefault();
     const form = evt.target;
@@ -19,12 +24,23 @@ class ContactForm extends Component {
     };
     this.props.addContact(newContact);
 
-    form.reset();
+    this.reset();
   };
 
   handleChange = ({ target: { name, value } }) => {
-    this.props.hasContact(name, value);
+    this.setState(() => {
+      return {
+        [name]: value,
+      };
+    });
   };
+
+  reset() {
+    this.setState({
+      name: '',
+      number: '',
+    });
+  }
 
   render() {
     return (
@@ -36,11 +52,11 @@ class ContactForm extends Component {
           <input
             type="text"
             name="name"
-            // value={this.name}
+            value={this.state.name}
             onChange={this.handleChange}
             id="name"
-            pattern="^[a-zA-Z]+(([' -][a-zA-Z ])?[a-zA-Z]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            pattern="^([a-zA-Zа-яА-ЯіІїЇєЄґҐ]{2,}\s[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{1,}'?-?[a-zA-Zа-яА-ЯіІїЇєЄґҐ]{2,}\s?([a-zA-Zа-яА-ЯіІїЇєЄґҐ]{1,})?)"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Jacob Mercer, Charles d'Artagnan"
             required
           />
           <label className={css.label} htmlFor="number">
@@ -49,11 +65,11 @@ class ContactForm extends Component {
           <input
             type="tel"
             name="number"
-            // value={this.number}
+            value={this.state.number}
             onChange={this.handleChange}
             id="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+            title="Phone number must be digits and have next format (000) 000-0000"
             required
           />
         </div>
