@@ -11,7 +11,6 @@ const ContactForm = ({ addContact }) => {
       name: form.name.value,
       number: form.number.value,
     };
-    console.log(newContact);
     const isAdded = addContact(newContact);
 
     if (isAdded) {
