@@ -1,10 +1,6 @@
 import css from './ContactList.module.css';
 
 const ContactList = ({ contacts, removeContact }) => {
-  const handleClick = evt => {
-    removeContact(evt.target.id);
-  };
-
   return (
     <ul className={css['contact-list']}>
       {contacts.map(contact => {
@@ -17,7 +13,7 @@ const ContactList = ({ contacts, removeContact }) => {
               id={contact.id}
               className={css['btn-delete']}
               type="button"
-              onClick={handleClick}
+              onClick={() => removeContact(contact.id)}
             >
               Delete
             </button>
